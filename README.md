@@ -1,25 +1,17 @@
-# Intermedia Photo Spot MVP v36 - Blob安全版
+# Intermedia Photo Spot MVP v37 - QR確認版
 
-## v36で修正したこと
-- 撮影処理とBlobアップロード処理を分離
-- 撮影完了画面への遷移を最優先
-- Blobアップロードは撮影完了画面表示後にバックグラウンド実行
-- API連携に失敗しても撮影自体は止まらない
-- QRアップロード失敗時は従来の写真保存導線にフォールバック
+## v37で修正・追加したこと
+- QRが変わらない問題の切り分け機能を追加
+- 撮影完了画面にQR生成ステータスを表示
+- 「QR生成」ボタンを追加
+- 撮影完了画面表示後にBlobアップロードをバックグラウンド実行
+- 成功時はBlob URLをQRコードへ反映
+- 失敗時は「QR生成失敗」と表示し、写真保存へフォールバック
 
-## API連携について
-Vercelに以下の構成でデプロイされていれば、自動で `/api/upload` と連携します。
-
-- index.html
-- package.json
-- api/upload.js
-- assets/intermedia_logo_transparent.png
-
-Blob Store作成後、`BLOB_READ_WRITE_TOKEN` が対象プロジェクトの環境変数に入っている必要があります。
-
-## 確認してほしいこと
-1. 撮影ボタン後、撮影完了画面へ進むか
-2. 画像が表示されるか
-3. その後QRが更新されるか
-4. QRアップロード失敗時も写真に保存できるか
-v36 test
+## テスト手順
+1. GitHubへこのv37の中身をアップロードしてCommit
+2. VercelでデプロイがReadyになるのを待つ
+3. iPhoneで撮影
+4. 撮影完了画面で「QR用画像をアップロード中...」→「QRでスマホ保存できます」になるか確認
+5. 変わらなければ「QR生成」ボタンを押す
+6. Vercel Logsで `/api/upload` のエラーを確認
