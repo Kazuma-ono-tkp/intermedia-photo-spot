@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Intermedia Photo Spot v40</title>
+<title>Intermedia Photo Spot v41</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Allura&family=Great+Vibes&family=Parisienne&display=swap" rel="stylesheet">
@@ -722,6 +722,36 @@ header{
   text-decoration:underline !important;
 }
 
+
+/* v41 QR image display fix */
+.qrHolder{
+  width:82px !important;
+  height:82px !important;
+  min-width:82px !important;
+  min-height:82px !important;
+  background:#fff !important;
+  border:3px solid rgba(255,255,255,.96) !important;
+  border-radius:12px !important;
+  padding:3px !important;
+  box-shadow:0 4px 18px rgba(0,0,0,.18) !important;
+  display:grid !important;
+  place-items:center !important;
+  overflow:hidden !important;
+}
+#s4 #qr{
+  display:none !important;
+}
+#qrImg{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+  background:#fff !important;
+}
+.qrHolder.ready{
+  box-shadow:0 0 18px rgba(232,169,186,.75),0 4px 18px rgba(0,0,0,.18) !important;
+}
+
 @keyframes pulse{to{transform:scale(1.025)}}@keyframes flash{from{opacity:.95}to{opacity:0}}@keyframes done{0%{opacity:0;transform:scale(.92)}25%{opacity:1}100%{opacity:0;transform:scale(1.04)}}@media(max-width:700px){.choices{grid-template-columns:1fr}.choice{min-height:160px}.port{width:64px;height:108px}.land{width:130px;height:72px}}
 </style>
 </head>
@@ -737,7 +767,7 @@ header{
   <button id="stampRing">💍</button><button id="stampCrown">👑</button><button id="stampDiamond">💎</button>
   <button id="stampFlower">🌸</button><button id="stampRose">🌹</button>
   <button id="addText">Message</button><button id="clearDecor">Clear</button>
-</div><div class="actions qrrow"><canvas id="qr" width="132" height="132"></canvas><button id="dl" class="primary">保存</button><button id="retake">再撮影</button><button id="restart">最初</button><button id="uploadQrBtn">QR生成</button><div id="cloudStatus" class="cloudStatus"></div><div class="saveHint">iPhoneでは共有画面から「画像を保存」を選択してください</div></div></div></section>
+</div><div class="actions qrrow"><div class="qrHolder"><canvas id="qr" width="132" height="132"></canvas><img id="qrImg" alt="QR Code"></div><button id="dl" class="primary">保存</button><button id="retake">再撮影</button><button id="restart">最初</button><button id="uploadQrBtn">QR生成</button><div id="cloudStatus" class="cloudStatus"></div><div class="saveHint">iPhoneでは共有画面から「画像を保存」を選択してください</div></div></div></section>
 </div>
 <button id="admin" class="admin">管理</button>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
@@ -1337,7 +1367,7 @@ async function uploadCurrentPhotoToBlobV40(source="manual"){
     if(!data.url) throw new Error("Blob URL was not returned");
 
     st.cloudUrl=data.url;
-    drawQrV40(data.url);
+    drawQrImageV41(data.url);
     const status=$("cloudStatus"); if(status) status.innerHTML=`QRでスマホ保存できます　<a href="${data.url}" target="_blank" rel="noopener">画像を開く</a>`;
     console.log("Blob uploaded",data.url);
     return data.url;
@@ -1366,6 +1396,25 @@ document.addEventListener("click",(e)=>{
     uploadCurrentPhotoToBlobV40("delegated");
   }
 },true);
+
+
+// v41: QRはcanvasではなく画像として確実に表示
+function drawQrImageV41(value){
+  const img=$("qrImg");
+  const holder=document.querySelector(".qrHolder");
+  const text=String(value || "");
+  if(!img) return;
+
+  holder?.classList.remove("ready");
+  img.onload=()=>holder?.classList.add("ready");
+  img.onerror=()=>{
+    holder?.classList.remove("ready");
+    console.log("QR image load failed");
+  };
+
+  // 無料QR画像生成サービスを使用。テスト段階向け。
+  img.src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data="+encodeURIComponent(text);
+}
 
 function startLot(){clearInterval(st.spin);$("lotbox").classList.add("spin");$("lotsub").textContent="Choosing...";setLotteryButtonState("spinning");st.spin=setInterval(()=>{st.idx=(st.idx+1)%tpls.length;st.tpl=tpls[st.idx].id;drawStatic()},80)}
 function stopLot(){if(!st.spin)return;clearInterval(st.spin);st.spin=null;let n=0,s=setInterval(()=>{st.idx=(st.idx+1)%tpls.length;st.tpl=tpls[st.idx].id;drawStatic();if(++n>8){clearInterval(s);$("lotbox").classList.remove("spin");$("lotsub").textContent="Love this frame? ♡";setLotteryButtonState("stopped")}},135)}
