@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Intermedia Photo Spot v42</title>
+<title>Intermedia Photo Spot v43</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Allura&family=Great+Vibes&family=Parisienne&display=swap" rel="stylesheet">
@@ -752,6 +752,83 @@ header{
   box-shadow:0 0 18px rgba(232,169,186,.75),0 4px 18px rgba(0,0,0,.18) !important;
 }
 
+
+/* v43 completion polish + required QR */
+#s4 .card{
+  grid-template-rows:auto minmax(0,1fr) auto auto auto !important;
+}
+.qrHolder{
+  width:92px !important;
+  height:92px !important;
+  min-width:92px !important;
+  min-height:92px !important;
+  background:#fff !important;
+  border:4px solid rgba(255,255,255,.98) !important;
+  border-radius:14px !important;
+  padding:4px !important;
+  box-shadow:0 6px 22px rgba(0,0,0,.20) !important;
+  display:grid !important;
+  place-items:center !important;
+  overflow:hidden !important;
+}
+.qrHolder.ready{
+  box-shadow:0 0 22px rgba(232,169,186,.78),0 6px 22px rgba(0,0,0,.20) !important;
+}
+#s4 #qr{
+  display:none !important;
+}
+#qrImg{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+  background:#fff !important;
+}
+#uploadQrBtn,#copyLinkBtn{
+  background:linear-gradient(135deg,#f5d6df,#f6e7bd) !important;
+  color:#7a4d56 !important;
+}
+#copyLinkBtn:disabled{
+  opacity:.45 !important;
+}
+.cloudStatus{
+  grid-column:1 / -1 !important;
+  width:100% !important;
+  text-align:center !important;
+  font-size:12px !important;
+  line-height:1.35 !important;
+  color:#8b7370 !important;
+  min-height:18px !important;
+  padding:3px 4px !important;
+}
+.cloudStatus.active{
+  color:#a56e79 !important;
+  font-weight:800 !important;
+}
+.cloudStatus a{
+  color:#a56e79 !important;
+  font-weight:900 !important;
+  text-decoration:underline !important;
+}
+#s4 .qrrow{
+  grid-template-columns:auto 1fr 1fr 1fr 1fr 1fr !important;
+  gap:5px !important;
+}
+@media(max-width:700px){
+  .qrHolder{
+    width:82px !important;
+    height:82px !important;
+    min-width:82px !important;
+    min-height:82px !important;
+  }
+  #s4 .qrrow{
+    grid-template-columns:auto 1fr 1fr 1fr !important;
+  }
+  #copyLinkBtn{
+    grid-column:auto;
+  }
+}
+
 @keyframes pulse{to{transform:scale(1.025)}}@keyframes flash{from{opacity:.95}to{opacity:0}}@keyframes done{0%{opacity:0;transform:scale(.92)}25%{opacity:1}100%{opacity:0;transform:scale(1.04)}}@media(max-width:700px){.choices{grid-template-columns:1fr}.choice{min-height:160px}.port{width:64px;height:108px}.land{width:130px;height:72px}}
 </style>
 </head>
@@ -761,13 +838,13 @@ header{
 <section id="s1" class="screen active"><div class="card"><div><h2 class="orientationSub">Choose your style</h2><p class="orientationSub"></p></div><div class="center"><div class="choices"><div id="p" class="choice"><div><div class="icon port">9:16</div><h2 class="scriptTitle">Portrait</h2></div></div><div id="l" class="choice sel"><div><div class="icon land">16:9</div><h2 class="scriptTitle">Landscape</h2></div></div></div></div><div class="actions"><button id="n1" class="primary scriptButton">Continue</button></div></div></section>
 <section id="s2" class="screen"><div class="card"><div><h2 class="lotteryTitle">Choose Your Frame</h2><p>START / STOPで決定します。</p></div><div class="lot"><div id="lotbox" class="lotbox"><div id="thumb" class="thumb"></div></div><div><div id="fname" class="fname"></div><div id="lotsub" class="sub">Tap START</div></div></div><div class="actions"><button id="start" class="primary">Start</button><button id="stop">Stop</button><button id="retry">Try Again</button><button id="n2" class="primary">Shoot</button><button id="b1">Back</button></div></div></section>
 <section id="s3" class="screen"><div class="card"><div><h2>Smile Time</h2><p>非表示videoをcanvasに描画してプレビューします。</p></div><div class="center"><div id="camBox" class="camera"><video id="video" autoplay muted playsinline webkit-playsinline></video><canvas id="preview"></canvas><div id="hint" class="hint"><div><b>Ready?</b><p>Tap camera start</p></div></div><div id="debug" class="debug"></div><div id="cutoutBadge" class="cutoutBadge hide" style="display:none!important">AI切り抜き ON</div><div id="sparkles" class="finishSparkle hide"></div><div id="count" class="count hide">3</div><div id="flash" class="flash hide"></div><div id="done" class="done hide">Beautiful!</div></div></div><div class="actions"><button id="cam" class="primary">カメラ起動</button><button id="aiCutout">AI切り抜き OFF</button><button id="shoot" class="primary" disabled>撮影する</button><button id="b2">Back</button></div></div></section>
-<section id="s4" class="screen"><div class="card"><div><h2>Beautiful Memory</h2><p></p></div><div class="center" style="position:relative"><canvas id="result"></canvas><div id="decorateLayer"></div></div><div class="decorTools">
+<section id="s4" class="screen"><div class="card"><div><h2>Beautiful Memory ♡</h2><p></p></div><div class="center" style="position:relative"><canvas id="result"></canvas><div id="decorateLayer"></div></div><div class="decorTools">
   <div class="stampPackTitle">Decorate</div>
   <button id="stampHeart">💕</button><button id="stampLove">💖</button><button id="stampSparkle">✨</button>
   <button id="stampRing">💍</button><button id="stampCrown">👑</button><button id="stampDiamond">💎</button>
   <button id="stampFlower">🌸</button><button id="stampRose">🌹</button>
   <button id="addText">Message</button><button id="clearDecor">Clear</button>
-</div><div class="actions qrrow"><div class="qrHolder"><canvas id="qr" width="132" height="132"></canvas><img id="qrImg" alt="QR Code"></div><button id="dl" class="primary">保存</button><button id="retake">再撮影</button><button id="restart">最初</button><button id="uploadQrBtn">QR生成</button><div id="cloudStatus" class="cloudStatus"></div><div class="saveHint">iPhoneでは共有画面から「画像を保存」を選択してください</div></div></div></section>
+</div><div class="actions qrrow"><div class="qrHolder"><canvas id="qr" width="132" height="132"></canvas><img id="qrImg" alt="QR Code"></div><button id="dl" class="primary">保存</button><button id="retake">再撮影</button><button id="restart">最初</button><button id="uploadQrBtn">QR生成</button><button id="copyLinkBtn">リンクコピー</button><div id="cloudStatus" class="cloudStatus"></div><div class="saveHint">iPhoneでは共有画面から「画像を保存」を選択してください</div></div></div></section>
 </div>
 <button id="admin" class="admin">管理</button>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
@@ -1117,7 +1194,7 @@ function drawStatic(){renderThumb();let [w,h]=dims(),ctx=preview.getContext("2d"
 function loop(){if(st.raf)cancelAnimationFrame(st.raf);let f=()=>{let [w,h]=dims(),ctx=preview.getContext("2d");ctx.clearRect(0,0,w,h);compose(ctx,w,h,true);updateSegmentation();st.raf=requestAnimationFrame(f)};f()}
 async function startCam(){setlog("カメラ起動開始");st.ready=false;$("shoot").disabled=true;$("hint").classList.remove("ready");try{if(st.stream)st.stream.getTracks().forEach(t=>t.stop());let stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:"user",width:{ideal:1280},height:{ideal:720}}});st.stream=stream;log("許可OK tracks="+stream.getVideoTracks().length);video.srcObject=stream;video.muted=true;video.playsInline=true;video.setAttribute("playsinline","");video.setAttribute("webkit-playsinline","");video.oncanplay=()=>{log("canplay "+video.videoWidth+"x"+video.videoHeight);ready()};video.onplaying=()=>{log("playing "+video.videoWidth+"x"+video.videoHeight);ready()};await video.play();log("play成功 "+video.videoWidth+"x"+video.videoHeight);await wait(600);if(video.videoWidth>0)ready()}catch(e){log("ERROR "+e.name+" "+e.message);alert("カメラ起動に失敗しました")}}
 function ready(){if(st.ready)return;st.ready=true;$("shoot").disabled=false;$("hint").classList.add("ready");log("プレビューOK "+video.videoWidth+"x"+video.videoHeight);loop()}
-async function shoot(){if(!st.ready){alert("先にカメラ起動してください");return}$("shoot").disabled=true;for(let n of["3","2","1","Smile!"]){$("count").textContent=n==="Smile!"?"Smile ♡":"✨ "+n+" ✨";$("count").classList.toggle("smile",n==="Smile!");$("count").classList.remove("hide");await wait(650);$("count").classList.add("hide");$("count").classList.remove("smile");await wait(80)}$("flash").classList.remove("hide");await wait(90);capture();burstSparkles();await wait(300);$("flash").classList.add("hide");go(4);bindQrButtonV40();setTimeout(()=>uploadCurrentPhotoToBlobV40("auto"),800);$("shoot").disabled=false}
+async function shoot(){if(!st.ready){alert("先にカメラ起動してください");return}$("shoot").disabled=true;for(let n of["3","2","1","Smile!"]){$("count").textContent=n==="Smile!"?"Smile ♡":"✨ "+n+" ✨";$("count").classList.toggle("smile",n==="Smile!");$("count").classList.remove("hide");await wait(650);$("count").classList.add("hide");$("count").classList.remove("smile");await wait(80)}$("flash").classList.remove("hide");await wait(90);capture();burstSparkles();await wait(300);$("flash").classList.add("hide");go(4);bindShareButtonsV43();setTimeout(()=>uploadCurrentPhotoToBlobV43("auto"),700);$("shoot").disabled=false}
 
 function drawVideoCoverUnmirrored(ctx,w,h){
   let sw=video.videoWidth,sh=video.videoHeight;
@@ -1367,7 +1444,7 @@ async function uploadCurrentPhotoToBlobV40(source="manual"){
     if(!data.url) throw new Error("Blob URL was not returned");
 
     st.cloudUrl=data.url;
-    drawQrImageV42(data.url);
+    drawQrImageV43(data.url);
     const status=$("cloudStatus"); if(status) status.innerHTML=`QRでスマホ保存できます　<a href="${data.url}" target="_blank" rel="noopener">画像を開く</a>`;
     console.log("Blob uploaded",data.url);
     return data.url;
@@ -1416,6 +1493,145 @@ function drawQrImageV42(value){
   img.src="/api/qr?data="+encodeURIComponent(text)+"&t="+Date.now();
 }
 
+
+// v43: completion polish + internal QR API
+function setCloudStatusV43(message, active=false, htmlMode=false){
+  const status=$("cloudStatus");
+  if(status){
+    if(htmlMode) status.innerHTML=message || "";
+    else status.textContent=message || "";
+    status.classList.toggle("active",!!active);
+  }
+}
+function drawQrImageV43(value){
+  const img=$("qrImg");
+  const holder=document.querySelector(".qrHolder");
+  const text=String(value || "");
+  if(!img) return;
+
+  holder?.classList.remove("ready");
+  img.onload=()=>holder?.classList.add("ready");
+  img.onerror=()=>{
+    holder?.classList.remove("ready");
+    setCloudStatusV43(`QR画像生成に失敗しました　<a href="${text}" target="_blank" rel="noopener">画像を開く</a>`,true,true);
+    console.log("QR image load failed", img.src);
+  };
+
+  // 自前Vercel FunctionでQRを生成。外部サービス非依存。
+  img.src="/api/qr?data="+encodeURIComponent(text)+"&t="+Date.now();
+}
+async function dataURLToJpegBlobV43(dataURL, quality=0.86){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement("canvas");
+      canvas.width=img.width;
+      canvas.height=img.height;
+      const ctx=canvas.getContext("2d");
+      ctx.fillStyle="#fff";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(img,0,0);
+      canvas.toBlob(blob=>{
+        if(blob) resolve(blob);
+        else reject(new Error("JPEG conversion failed"));
+      },"image/jpeg",quality);
+    };
+    img.onerror=()=>reject(new Error("Image load failed for JPEG conversion"));
+    img.src=dataURL;
+  });
+}
+async function uploadCurrentPhotoToBlobV43(source="auto"){
+  if(!st.last){
+    setCloudStatusV43("撮影画像がまだありません。先に撮影してください。",true);
+    return null;
+  }
+
+  const uploadBtn=$("uploadQrBtn");
+  const copyBtn=$("copyLinkBtn");
+  if(uploadBtn) uploadBtn.disabled=true;
+  if(copyBtn) copyBtn.disabled=true;
+
+  try{
+    setCloudStatusV43("QR用画像をアップロード中...",true);
+    const blob=await dataURLToJpegBlobV43(st.last,0.86);
+    setCloudStatusV43(`QR用画像をアップロード中... ${(blob.size/1024/1024).toFixed(2)}MB`,true);
+
+    const res=await fetch("/api/upload",{
+      method:"POST",
+      headers:{
+        "content-type":"image/jpeg",
+        "x-filename":`intermedia-photo-${Date.now()}.jpg`
+      },
+      body:blob
+    });
+
+    const raw=await res.text();
+    let data={};
+    try{ data=JSON.parse(raw); }catch(_){}
+
+    if(!res.ok){
+      throw new Error(data.message || data.error || raw || ("upload failed: "+res.status));
+    }
+    if(!data.url) throw new Error("Blob URL was not returned");
+
+    st.cloudUrl=data.url;
+    drawQrImageV43(data.url);
+    setCloudStatusV43(`QRでスマホ保存できます　<a href="${data.url}" target="_blank" rel="noopener">画像を開く</a>`,true,true);
+    if(copyBtn) copyBtn.disabled=false;
+    console.log("Blob uploaded",data.url);
+    return data.url;
+  }catch(e){
+    console.log("Blob upload failed",e);
+    setCloudStatusV43("QR生成失敗: " + (e.message || e), true);
+    return null;
+  }finally{
+    if(uploadBtn) uploadBtn.disabled=false;
+  }
+}
+async function copyCloudLinkV43(){
+  if(!st.cloudUrl){
+    setCloudStatusV43("まだ共有リンクがありません。QR生成を押してください。",true);
+    return;
+  }
+  try{
+    await navigator.clipboard.writeText(st.cloudUrl);
+    setCloudStatusV43("画像リンクをコピーしました",true);
+  }catch(e){
+    setCloudStatusV43(`コピーできませんでした　<a href="${st.cloudUrl}" target="_blank" rel="noopener">画像を開く</a>`,true,true);
+  }
+}
+function bindShareButtonsV43(){
+  const uploadBtn=$("uploadQrBtn");
+  const copyBtn=$("copyLinkBtn");
+  if(uploadBtn && !uploadBtn.dataset.boundV43){
+    uploadBtn.dataset.boundV43="1";
+    uploadBtn.addEventListener("click",(e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      uploadCurrentPhotoToBlobV43("button");
+    });
+  }
+  if(copyBtn && !copyBtn.dataset.boundV43){
+    copyBtn.dataset.boundV43="1";
+    copyBtn.disabled=true;
+    copyBtn.addEventListener("click",(e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      copyCloudLinkV43();
+    });
+  }
+}
+document.addEventListener("click",(e)=>{
+  if(e.target?.id==="uploadQrBtn"){
+    e.preventDefault();
+    uploadCurrentPhotoToBlobV43("delegated");
+  }
+  if(e.target?.id==="copyLinkBtn"){
+    e.preventDefault();
+    copyCloudLinkV43();
+  }
+},true);
+
 function startLot(){clearInterval(st.spin);$("lotbox").classList.add("spin");$("lotsub").textContent="Choosing...";setLotteryButtonState("spinning");st.spin=setInterval(()=>{st.idx=(st.idx+1)%tpls.length;st.tpl=tpls[st.idx].id;drawStatic()},80)}
 function stopLot(){if(!st.spin)return;clearInterval(st.spin);st.spin=null;let n=0,s=setInterval(()=>{st.idx=(st.idx+1)%tpls.length;st.tpl=tpls[st.idx].id;drawStatic();if(++n>8){clearInterval(s);$("lotbox").classList.remove("spin");$("lotsub").textContent="Love this frame? ♡";setLotteryButtonState("stopped")}},135)}
 
@@ -1428,7 +1644,7 @@ function dataURLToBlob(dataURL){
   return new Blob([arr],{type:mime});
 }
 async function saveToPhotos(){
-  mergeDecorToResult(); uploadCurrentPhotoToBlobV40(); const last=(typeof st!=="undefined"?st.last:state.last); if(!last){alert("先に撮影してください");return;}
+  mergeDecorToResult(); uploadCurrentPhotoToBlobV43("manual"); const last=(typeof st!=="undefined"?st.last:state.last); if(!last){alert("先に撮影してください");return;}
   try{
     const blob=dataURLToBlob(last);
     const file=new File([blob],`digital-photo-${Date.now()}.png`,{type:"image/png"});
@@ -1671,6 +1887,7 @@ qr = drawRealQrV36;
 
 bindQrButtonV40();
 bindQrButtonV40();
+bindShareButtonsV43();
 setMode("landscape");resetLotteryToStart();};$("n1").onclick=()=>{resetLotteryToStart();go(2);};$("b1").onclick=()=>{resetLotteryToStart();go(1);};$("n2").onclick=()=>go(3);$("b2").onclick=()=>go(2);$("cam").onclick=startCam;$("shoot").onclick=shoot;$("retake").onclick=()=>go(3);$("restart").onclick=()=>go(1);$("dl").onclick=saveToPhotos;$("start").onclick=startLot;$("stop").onclick=stopLot;$("retry").onclick=()=>{startLot();setTimeout(stopLot,900+Math.random()*800)};$("admin").onclick=()=>{$("panel").classList.add("open");renderAdmin();};$("close").onclick=()=>$("panel").classList.remove("open");
 if($("upload")){
   $("upload").onchange=e=>{

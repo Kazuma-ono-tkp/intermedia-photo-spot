@@ -16,8 +16,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
   try {
-    const contentType = req.headers['content-type'] || 'image/png';
-    const rawName = req.headers['x-filename'] || `intermedia-photo-${Date.now()}.png`;
+    const contentType = req.headers['content-type'] || 'image/jpeg';
+    const rawName = req.headers['x-filename'] || `intermedia-photo-${Date.now()}.jpg`;
     const safeName = String(rawName).replace(/[^a-zA-Z0-9._-]/g, '_');
     const pathname = `intermedia-photo-spot/${Date.now()}-${safeName}`;
     const body = await readRequestBody(req);
