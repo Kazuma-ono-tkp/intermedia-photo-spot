@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Intermedia Photo Spot v41</title>
+<title>Intermedia Photo Spot v42</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Allura&family=Great+Vibes&family=Parisienne&display=swap" rel="stylesheet">
@@ -1367,7 +1367,7 @@ async function uploadCurrentPhotoToBlobV40(source="manual"){
     if(!data.url) throw new Error("Blob URL was not returned");
 
     st.cloudUrl=data.url;
-    drawQrImageV41(data.url);
+    drawQrImageV42(data.url);
     const status=$("cloudStatus"); if(status) status.innerHTML=`QRでスマホ保存できます　<a href="${data.url}" target="_blank" rel="noopener">画像を開く</a>`;
     console.log("Blob uploaded",data.url);
     return data.url;
@@ -1399,7 +1399,7 @@ document.addEventListener("click",(e)=>{
 
 
 // v41: QRはcanvasではなく画像として確実に表示
-function drawQrImageV41(value){
+function drawQrImageV42(value){
   const img=$("qrImg");
   const holder=document.querySelector(".qrHolder");
   const text=String(value || "");
@@ -1412,8 +1412,8 @@ function drawQrImageV41(value){
     console.log("QR image load failed");
   };
 
-  // 無料QR画像生成サービスを使用。テスト段階向け。
-  img.src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data="+encodeURIComponent(text);
+  // v42: 外部サービスではなく、自分のVercel APIでQRを生成
+  img.src="/api/qr?data="+encodeURIComponent(text)+"&t="+Date.now();
 }
 
 function startLot(){clearInterval(st.spin);$("lotbox").classList.add("spin");$("lotsub").textContent="Choosing...";setLotteryButtonState("spinning");st.spin=setInterval(()=>{st.idx=(st.idx+1)%tpls.length;st.tpl=tpls[st.idx].id;drawStatic()},80)}

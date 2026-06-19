@@ -1,9 +1,10 @@
 {
-  "name": "intermedia-photo-spot-v41",
+  "name": "intermedia-photo-spot-v42",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "dependencies": {
-    "@vercel/blob": "latest"
+    "@vercel/blob": "latest",
+    "qrcode": "latest"
   }
 }
