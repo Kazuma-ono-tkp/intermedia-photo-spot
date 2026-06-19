@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     const pathname = `intermedia-photo-spot/${Date.now()}-${safeName}`;
     const body = await readRequestBody(req);
     if (!body || body.length === 0) return res.status(400).json({ error: 'No image body received' });
-    const maxBytes = 8 * 1024 * 1024;
+    const maxBytes = 15 * 1024 * 1024;
     if (body.length > maxBytes) return res.status(413).json({ error: 'Image too large. Please reduce output size.' });
     const blob = await put(pathname, body, { access: 'public', contentType, addRandomSuffix: false });
     return res.status(200).json({ url: blob.url, pathname: blob.pathname, size: body.length });

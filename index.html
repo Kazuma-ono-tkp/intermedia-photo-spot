@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Intermedia Photo Spot v38</title>
+<title>Intermedia Photo Spot v40</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Allura&family=Great+Vibes&family=Parisienne&display=swap" rel="stylesheet">
@@ -693,6 +693,35 @@ header{
   touch-action:manipulation;
 }
 
+
+/* v39 QR visibility fix */
+#s4 #qr{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  width:76px !important;
+  height:76px !important;
+  min-width:76px !important;
+  min-height:76px !important;
+  background:#fff !important;
+  border:3px solid rgba(255,255,255,.95) !important;
+  border-radius:12px !important;
+  padding:3px !important;
+  box-shadow:0 4px 18px rgba(0,0,0,.18) !important;
+}
+#qr.cloudReady{
+  box-shadow:0 0 18px rgba(232,169,186,.75),0 4px 18px rgba(0,0,0,.18) !important;
+}
+#uploadQrBtn.activeSpin,
+#uploadQrBtn:focus{
+  outline:none !important;
+}
+.cloudStatus a{
+  color:#a56e79 !important;
+  font-weight:900 !important;
+  text-decoration:underline !important;
+}
+
 @keyframes pulse{to{transform:scale(1.025)}}@keyframes flash{from{opacity:.95}to{opacity:0}}@keyframes done{0%{opacity:0;transform:scale(.92)}25%{opacity:1}100%{opacity:0;transform:scale(1.04)}}@media(max-width:700px){.choices{grid-template-columns:1fr}.choice{min-height:160px}.port{width:64px;height:108px}.land{width:130px;height:72px}}
 </style>
 </head>
@@ -1058,7 +1087,7 @@ function drawStatic(){renderThumb();let [w,h]=dims(),ctx=preview.getContext("2d"
 function loop(){if(st.raf)cancelAnimationFrame(st.raf);let f=()=>{let [w,h]=dims(),ctx=preview.getContext("2d");ctx.clearRect(0,0,w,h);compose(ctx,w,h,true);updateSegmentation();st.raf=requestAnimationFrame(f)};f()}
 async function startCam(){setlog("カメラ起動開始");st.ready=false;$("shoot").disabled=true;$("hint").classList.remove("ready");try{if(st.stream)st.stream.getTracks().forEach(t=>t.stop());let stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:"user",width:{ideal:1280},height:{ideal:720}}});st.stream=stream;log("許可OK tracks="+stream.getVideoTracks().length);video.srcObject=stream;video.muted=true;video.playsInline=true;video.setAttribute("playsinline","");video.setAttribute("webkit-playsinline","");video.oncanplay=()=>{log("canplay "+video.videoWidth+"x"+video.videoHeight);ready()};video.onplaying=()=>{log("playing "+video.videoWidth+"x"+video.videoHeight);ready()};await video.play();log("play成功 "+video.videoWidth+"x"+video.videoHeight);await wait(600);if(video.videoWidth>0)ready()}catch(e){log("ERROR "+e.name+" "+e.message);alert("カメラ起動に失敗しました")}}
 function ready(){if(st.ready)return;st.ready=true;$("shoot").disabled=false;$("hint").classList.add("ready");log("プレビューOK "+video.videoWidth+"x"+video.videoHeight);loop()}
-async function shoot(){if(!st.ready){alert("先にカメラ起動してください");return}$("shoot").disabled=true;for(let n of["3","2","1","Smile!"]){$("count").textContent=n==="Smile!"?"Smile ♡":"✨ "+n+" ✨";$("count").classList.toggle("smile",n==="Smile!");$("count").classList.remove("hide");await wait(650);$("count").classList.add("hide");$("count").classList.remove("smile");await wait(80)}$("flash").classList.remove("hide");await wait(90);capture();burstSparkles();await wait(300);$("flash").classList.add("hide");go(4);bindQrButtonV38();setTimeout(()=>uploadCurrentPhotoToBlobV38("auto"),800);$("shoot").disabled=false}
+async function shoot(){if(!st.ready){alert("先にカメラ起動してください");return}$("shoot").disabled=true;for(let n of["3","2","1","Smile!"]){$("count").textContent=n==="Smile!"?"Smile ♡":"✨ "+n+" ✨";$("count").classList.toggle("smile",n==="Smile!");$("count").classList.remove("hide");await wait(650);$("count").classList.add("hide");$("count").classList.remove("smile");await wait(80)}$("flash").classList.remove("hide");await wait(90);capture();burstSparkles();await wait(300);$("flash").classList.add("hide");go(4);bindQrButtonV40();setTimeout(()=>uploadCurrentPhotoToBlobV40("auto"),800);$("shoot").disabled=false}
 
 function drawVideoCoverUnmirrored(ctx,w,h){
   let sw=video.videoWidth,sh=video.videoHeight;
@@ -1199,7 +1228,7 @@ function drawQrV37(value){
 
 
 
-function setCloudStatusV38(message, active=false){
+function setCloudStatusV40(message, active=false){
   const status=$("cloudStatus");
   if(status){
     status.textContent=message || "";
@@ -1215,50 +1244,85 @@ function dataURLToBlobV38(dataURL){
   for(let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
   return new Blob([arr],{type:mime});
 }
-function drawQrV38(value){
+function drawQrV40(value){
   const canvas=$("qr");
   if(!canvas) return;
   canvas.classList.remove("cloudReady");
+  canvas.width=132;
+  canvas.height=132;
   const text=String(value || "");
-  const fallback=()=>{
-    const c=canvas.getContext("2d"),cell=6.6;
-    c.clearRect(0,0,canvas.width,canvas.height);
-    c.fillStyle="#fff";c.fillRect(0,0,132,132);c.fillStyle="#111";
-    const hash=[...text.slice(0,120)].reduce((a,x)=>a+x.charCodeAt(0),0);
-    const f=(x,y)=>{c.fillStyle="#111";c.fillRect(x,y,46,46);c.fillStyle="#fff";c.fillRect(x+7,y+7,32,32);c.fillStyle="#111";c.fillRect(x+14,y+14,18,18)};
-    f(7,7);f(79,7);f(7,79);
-    for(let y=2;y<18;y++)for(let x=2;x<18;x++){if((x<9&&y<9)||(x>10&&y<9)||(x<9&&y>10))continue;if(((x*31+y*17+hash)%5)<2)c.fillRect(x*cell,y*cell,cell,cell);}
+
+  const drawUrlFallback=()=>{
+    const c=canvas.getContext("2d");
+    c.clearRect(0,0,132,132);
+    c.fillStyle="#fff";c.fillRect(0,0,132,132);
+    c.fillStyle="#111";
+    c.font="bold 13px system-ui";
+    c.textAlign="center";
+    c.fillText("OPEN",66,52);
+    c.fillText("PHOTO",66,74);
+    c.font="10px system-ui";
+    c.fillText("tap link below",66,96);
   };
+
   if(window.QRCode && QRCode.toCanvas){
-    QRCode.toCanvas(canvas,text,{width:132,margin:1,errorCorrectionLevel:"M"},err=>{
-      if(err){ console.log("QR draw failed",err); fallback(); }
-      else canvas.classList.add("cloudReady");
+    QRCode.toCanvas(canvas,text,{width:132,margin:1,errorCorrectionLevel:"M",color:{dark:"#111000",light:"#ffffff"}},err=>{
+      if(err){
+        console.log("QR draw failed",err);
+        drawUrlFallback();
+      }else{
+        canvas.classList.add("cloudReady");
+      }
     });
   }else{
-    fallback();
+    console.log("QRCode library missing");
+    drawUrlFallback();
   }
 }
-async function uploadCurrentPhotoToBlobV38(source="manual"){
+
+async function dataURLToJpegBlobV40(dataURL, quality=0.86){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement("canvas");
+      canvas.width=img.width;
+      canvas.height=img.height;
+      const ctx=canvas.getContext("2d");
+      ctx.fillStyle="#fff";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(img,0,0);
+      canvas.toBlob(blob=>{
+        if(blob) resolve(blob);
+        else reject(new Error("JPEG conversion failed"));
+      },"image/jpeg",quality);
+    };
+    img.onerror=()=>reject(new Error("Image load failed for JPEG conversion"));
+    img.src=dataURL;
+  });
+}
+
+async function uploadCurrentPhotoToBlobV40(source="manual"){
   console.log("v38 QR upload requested",source,!!st.last);
-  setCloudStatusV38("QR生成を開始しました...",true);
+  setCloudStatusV40("QR生成を開始しました...",true);
 
   if(!st.last){
-    setCloudStatusV38("撮影画像がまだありません。先に撮影してください。",true);
+    setCloudStatusV40("撮影画像がまだありません。先に撮影してください。",true);
     return null;
   }
 
   const btn=$("uploadQrBtn");
-  if(btn) btn.disabled=true;
+  if(btn){ btn.disabled=true; btn.blur(); btn.classList.remove("activeSpin"); }
 
   try{
-    setCloudStatusV38("QR用画像をアップロード中...",true);
-    const blob=dataURLToBlobV38(st.last);
+    setCloudStatusV40("QR用画像をアップロード中...",true);
+    const blob=await dataURLToJpegBlobV40(st.last,0.86);
 
+    setCloudStatusV40(`QR用画像をアップロード中... ${(blob.size/1024/1024).toFixed(2)}MB`,true);
     const res=await fetch("/api/upload",{
       method:"POST",
       headers:{
-        "content-type":"image/png",
-        "x-filename":`intermedia-photo-${Date.now()}.png`
+        "content-type":"image/jpeg",
+        "x-filename":`intermedia-photo-${Date.now()}.jpg`
       },
       body:blob
     });
@@ -1273,33 +1337,33 @@ async function uploadCurrentPhotoToBlobV38(source="manual"){
     if(!data.url) throw new Error("Blob URL was not returned");
 
     st.cloudUrl=data.url;
-    drawQrV38(data.url);
-    setCloudStatusV38("QRでスマホ保存できます",true);
+    drawQrV40(data.url);
+    const status=$("cloudStatus"); if(status) status.innerHTML=`QRでスマホ保存できます　<a href="${data.url}" target="_blank" rel="noopener">画像を開く</a>`;
     console.log("Blob uploaded",data.url);
     return data.url;
   }catch(e){
     console.log("Blob upload failed",e);
-    setCloudStatusV38("QR生成失敗: " + (e.message || e), true);
+    setCloudStatusV40("QR生成失敗: " + (e.message || e), true);
     return null;
   }finally{
-    if(btn) btn.disabled=false;
+    if(btn){ btn.disabled=false; btn.blur(); btn.classList.remove("activeSpin"); }
   }
 }
-function bindQrButtonV38(){
+function bindQrButtonV40(){
   const btn=$("uploadQrBtn");
   if(btn && !btn.dataset.boundV38){
     btn.dataset.boundV38="1";
     btn.addEventListener("click",(e)=>{
       e.preventDefault();
       e.stopPropagation();
-      uploadCurrentPhotoToBlobV38("button");
+      e.target.blur(); uploadCurrentPhotoToBlobV40("button");
     });
   }
 }
 document.addEventListener("click",(e)=>{
   if(e.target && e.target.id==="uploadQrBtn"){
     e.preventDefault();
-    uploadCurrentPhotoToBlobV38("delegated");
+    uploadCurrentPhotoToBlobV40("delegated");
   }
 },true);
 
@@ -1315,7 +1379,7 @@ function dataURLToBlob(dataURL){
   return new Blob([arr],{type:mime});
 }
 async function saveToPhotos(){
-  mergeDecorToResult(); uploadCurrentPhotoToBlobV38(); const last=(typeof st!=="undefined"?st.last:state.last); if(!last){alert("先に撮影してください");return;}
+  mergeDecorToResult(); uploadCurrentPhotoToBlobV40(); const last=(typeof st!=="undefined"?st.last:state.last); if(!last){alert("先に撮影してください");return;}
   try{
     const blob=dataURLToBlob(last);
     const file=new File([blob],`digital-photo-${Date.now()}.png`,{type:"image/png"});
@@ -1556,8 +1620,8 @@ qr = drawRealQrV36;
 
 
 
-bindQrButtonV38();
-bindQrButtonV38();
+bindQrButtonV40();
+bindQrButtonV40();
 setMode("landscape");resetLotteryToStart();};$("n1").onclick=()=>{resetLotteryToStart();go(2);};$("b1").onclick=()=>{resetLotteryToStart();go(1);};$("n2").onclick=()=>go(3);$("b2").onclick=()=>go(2);$("cam").onclick=startCam;$("shoot").onclick=shoot;$("retake").onclick=()=>go(3);$("restart").onclick=()=>go(1);$("dl").onclick=saveToPhotos;$("start").onclick=startLot;$("stop").onclick=stopLot;$("retry").onclick=()=>{startLot();setTimeout(stopLot,900+Math.random()*800)};$("admin").onclick=()=>{$("panel").classList.add("open");renderAdmin();};$("close").onclick=()=>$("panel").classList.remove("open");
 if($("upload")){
   $("upload").onchange=e=>{
